@@ -20,7 +20,7 @@ python main.py
 ```
 ## Screenshots
 
-![alt text](http://dl.atvg-studios.at/_images_png/PlatinumBot.png)
+[![PlatinumBot Preview](http://dl.atvg-studios.at/_images_png/PlatinumBot.png)](https://gitlab.atvg-studios.at/root/PlatinumBot)
 
 ## Contributing
 
