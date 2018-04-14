@@ -84,8 +84,9 @@ class Network():
             # verify your command target
             if resultBruteforce == 0:
                 self.ut.viewsPrint("showMsgCollectMoneyUser", "[{}] - \033[32m{} '{}'\033[0m".format(os.path.basename(__file__), "\033[32mStart Bruteforce to", ip))
-                self.ChangeLog(ip)
                 time.sleep(0.5)
+                self.ChangeLog(ip)
+                time.sleep(0.3)
 
             # if result is return 2 you SDK level is == 0.
             # don't possibly for you to hack wait time for
@@ -120,7 +121,8 @@ class Network():
                 self.ChangeLog(PlayerBruteIP)
             else:
                 self.ut.viewsPrint("showMsgCollectMoneyUser", "[{}] - \033[33m{} {}$ from '{}'\033[0m".format(os.path.basename(__file__), "There is no money to get.", money, PlayerBruteIP))
-                time.sleep(0.5)
+                time.sleep(1)
+                self.ChangeLog(PlayerBruteIP)
 
     def createMalwareKit(self):
         malware = self.ut.requestString("mwk.php", accesstoken=self.Configuration["accessToken"], lang="en")
