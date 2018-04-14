@@ -143,7 +143,7 @@ class Utils:
           print("please Change Username/Password to config.yml")
           sys.exit()
         self.user_agent = self.generateUA(self.username + self.password)
-        self.all_data = [['PlatinumBot v1.1 by AtjonTV | Based on vHackOSBot-Python by vBlackOut  [https://github.com/vBlackOut]']]
+        self.all_data = [['PlatinumBot v1.2 by AtjonTV | Based on vHackOSBot-Python by vBlackOut  [https://github.com/vBlackOut]']]
 
         try:
             if self.sync_mobile:
@@ -248,37 +248,78 @@ class Utils:
             print(table2.table)
             if windows is False:
                 sys.stdout.write("""\nCMD: [m] Get Miner info
+     [a] Get All applications
      [q] Quit Program
 Waiting for user input : """)
                 with raw_mode(sys.stdin):
                     try:
-                      if cur_version <= req_version:
-                        while True:
-                            ch = sys.stdin.read(1)
-                            if ch == "m":
-                              self.minefinish = int(self.account_info['minerLeft'])
-                              sys.stdout.write("\nminerLeft {} in secondes".format(self.minefinish))
-                              sys.stdout.write("\nwaiting until {} --- {}".format(self.tuntin(self.minefinish), datetime.timedelta(seconds=(self.minefinish))))
-                              time.sleep(1)
-                            if ch == "q":
-                              sys.stdout.write("\nok ok, good bye ;)\n")
-                              sys.exit()
-                      else:
-                        while True:
-                            ch = sys.stdin.read(1)
-                            if str(ch) == "m":
-                              self.minefinish = int(self.account_info['minerLeft'])
-                              sys.stdout.write("\nminerLeft {} in secondes".format(self.minefinish))
-                              sys.stdout.write("\nwaiting until {} --- {}".format(self.tuntin(self.minefinish), datetime.timedelta(seconds=(self.minefinish))))
-                              time.sleep(1)
-                            if ch == "q":
-                              sys.stdout.write("\nok ok, good bye ;)\n")
-                              sys.exit()
-                            break
+                        if cur_version <= req_version:
+                            while True:
+                                ch = sys.stdin.read(1)
+                                if ch == "a":
+                                    p = Player(self)
+                                    getTask = self.requestString("tasks.php", accesstoken=self.Configuration["accessToken"])
+                                    sdk = p.getHelperApplication()["SDK"]["level"]
+                                    ipsp = p.getHelperApplication()["IPSP"]["level"]
+                                    bp = p.getHelperApplication()["BP"]["level"]
+                                    brute = p.getHelperApplication()["BRUTE"]["level"]
+                                    spam = p.getHelperApplication()["SPAM"]["level"]
+                                    fw = p.getHelperApplication()["FW"]["level"]
+                                    av = p.getHelperApplication()["AV"]["level"]
+                                    sys.stdout.write("\n \
+    SDK: {} \
+    IPSP: {}\n \
+    Bank Protect: {} \
+    BruteForce: {}\n \
+    SPAM: {} \
+    Firewall: {}\n \
+    Antivirus: {}".format(sdk, ipsp, bp, brute, spam, fw, av))
+
+                                    time.sleep(1.5)
+                                if ch == "m":
+                                    self.minefinish = int(self.account_info['minerLeft'])
+                                    sys.stdout.write("\nminerLeft {} in secondes".format(self.minefinish))
+                                    sys.stdout.write("\nwaiting until {} --- {}".format(self.tuntin(self.minefinish), datetime.timedelta(seconds=(self.minefinish))))
+                                    time.sleep(1)
+                                if ch == "q":
+                                    sys.stdout.write("\nok ok, good bye ;)\n")
+                                    sys.exit()
+                        else:
+                            while True:
+                                ch = sys.stdin.read(1)
+                                if ch == "a":
+                                    p = Player(self)
+                                    getTask = self.requestString("tasks.php", accesstoken=self.Configuration["accessToken"])
+                                    sdk = p.getHelperApplication()["SDK"]["level"]
+                                    ipsp = p.getHelperApplication()["IPSP"]["level"]
+                                    bp = p.getHelperApplication()["BP"]["level"]
+                                    brute = p.getHelperApplication()["BRUTE"]["level"]
+                                    spam = p.getHelperApplication()["SPAM"]["level"]
+                                    fw = p.getHelperApplication()["FW"]["level"]
+                                    av = p.getHelperApplication()["AV"]["level"]
+                                    sys.stdout.write("\n \
+     SDK: {} \
+     IPSP: {}\n \
+     Bank Protect: {} \
+     BruteForce: {}\n \
+     SPAM: {} \
+     Firewall: {}\n \
+     Antivirus: {}".format(sdk, ipsp, bp, brute, spam, fw, av))
+
+                                    time.sleep(1.5)
+                                if str(ch) == "m":
+                                    self.minefinish = int(self.account_info['minerLeft'])
+                                    sys.stdout.write("\nminerLeft {} in secondes".format(self.minefinish))
+                                    sys.stdout.write("\nwaiting until {} --- {}".format(self.tuntin(self.minefinish), datetime.timedelta(seconds=(self.minefinish))))
+                                    time.sleep(1)
+                                if ch == "q":
+                                    sys.stdout.write("\nok ok, good bye ;)\n")
+                                    sys.exit()
+                                break
                     except (KeyboardInterrupt, EOFError):
                         pass
         except IOError as e:
-          pass
+            pass
 
     def tuntin(self, secs):
         st = (datetime.datetime.now() + datetime.timedelta(seconds=300))
@@ -353,15 +394,15 @@ Waiting for user input : """)
             self.Configuration.yaml_add_eol_comment("# <- Automatical accessToken for your account don't change /!\\", 'accessToken', column=5)
 
             try:
-              # for python 3
+                # for python 3
                 with io.open('config.yml', 'w+') as outfile:
-                  yaml.dump(self.Configuration, stream=outfile, default_flow_style=False,
-                            Dumper=yaml.RoundTripDumper, indent=4, block_seq_indent=1)
+                    yaml.dump(self.Configuration, stream=outfile, default_flow_style=False,
+                              Dumper=yaml.RoundTripDumper, indent=4, block_seq_indent=1)
             except:
-              # for python 2
+                # for python 2
                 with io.open('config.yml', 'wb') as outfile:
-                  yaml.dump(self.Configuration, stream=outfile, default_flow_style=False,
-                            Dumper=yaml.RoundTripDumper, indent=4, block_seq_indent=1)
+                    yaml.dump(self.Configuration, stream=outfile, default_flow_style=False,
+                              Dumper=yaml.RoundTripDumper, indent=4, block_seq_indent=1)
 
             self.request = None
 
@@ -376,7 +417,7 @@ Waiting for user input : """)
             self.Configuration.yaml_add_eol_comment("# <- Automatical accessToken for your account don't change /!\\", 'accessToken', column=5)
 
             try:
-              # for python 3
+                # for python 3
                 with io.open('config.yml', 'w') as outfile:
                     yaml.dump(self.Configuration, stream=outfile, default_flow_style=False,
                               Dumper=yaml.RoundTripDumper, indent=4, block_seq_indent=1)
@@ -428,9 +469,9 @@ Waiting for user input : """)
 
     def CheckServerError(self, code_return):
         try:
-          code_return = code_return["result"]
+            code_return = code_return["result"]
         except (TypeError, IndexError):
-          code_return = 0
+            code_return = 0
 
         t = None
         if code_return == u"5":
@@ -526,7 +567,7 @@ Waiting for user input : """)
             elif self.uID is not None or self.accessToken is not None:
                 #request = requests.Session()
                 if not self.request:
-                  self.request = requests.Session()
+                    self.request = requests.Session()
 
                 self.request.headers.update({'User-agent': self.user_agent})
 
@@ -639,7 +680,7 @@ Waiting for user input : """)
             elif self.uID is not None or self.accessToken is not None:
                 #request = requests.Session()
                 if not self.request:
-                  self.request = requests.Session()
+                    self.request = requests.Session()
 
                 self.request.headers.update({'User-agent': self.user_agent})
 
@@ -675,3 +716,106 @@ Waiting for user input : """)
             if kwargs["debug"] is True:
                 logging.info(result.json())
             return parseJson
+
+class Player():
+    def __init__(self, ut):
+        self.ut = ut
+        self.Configuration = self.ut.readConfiguration()
+        self.getStore = self.ut.requestString("store.php",
+                                              accesstoken=self.Configuration["accessToken"], lang="en")
+
+    def getApplication(self):
+        Dict_request = self.getStore["apps"]
+        ApplicationCount = []
+
+        for ApplicationUp in enumerate(Dict_request):
+            Application = {}
+            try:
+                Application["baseprice"] = ApplicationUp[1]["baseprice"]
+                Application["level"] = ApplicationUp[1]["level"]
+                Application["price"] = ApplicationUp[1]["price"]
+                Application["factor"] = ApplicationUp[1]["factor"]
+                Application["maxlvl"] = ApplicationUp[1]["maxlvl"]
+                Application["running"] = ApplicationUp[1]["running"]
+                Application["appid"] = ApplicationUp[1]["appid"]
+                Application["require"] = ApplicationUp[1]["require"]
+
+            except KeyError as e:
+                Application["baseprice"] = None
+                Application["level"] = ApplicationUp[1]["level"]
+                Application["price"] = ApplicationUp[1]["price"]
+                Application["factor"] = None
+                Application["maxlvl"] = ApplicationUp[1]["maxlvl"]
+                Application["running"] = None
+                Application["appid"] = ApplicationUp[1]["appid"]
+                Application["require"] = ApplicationUp[1]["require"]
+
+            ApplicationCount.append(Application)
+
+        return ApplicationCount
+
+    def getHelperApplication(self):
+        Application = self.getApplication()
+        FinalApplication = {}
+
+        for allApplication in Application:
+            # antivirus
+            if int(allApplication["appid"]) == 1:
+                FinalApplication["AV"] = allApplication
+
+            # firewall
+            if int(allApplication["appid"]) == 2:
+                FinalApplication["FW"] = allApplication
+
+            # spam
+            if int(allApplication["appid"]) == 3:
+                FinalApplication["SPAM"] = allApplication
+
+            # brute force
+            if int(allApplication["appid"]) == 4:
+                FinalApplication["BRUTE"] = allApplication
+
+            # banque protecte
+            if int(allApplication["appid"]) == 5:
+                FinalApplication["BP"] = allApplication
+
+            # Software developement kit
+            if int(allApplication["appid"]) == 6:
+                FinalApplication["SDK"] = allApplication
+
+            if int(allApplication["appid"]) == 7:
+                pass
+                #FinalApplication[""] = allApplication
+
+            if int(allApplication["appid"]) == 8:
+                pass
+                #FinalApplication[""] = allApplication
+
+            if int(allApplication["appid"]) == 9:
+                pass
+                #FinalApplication[""] = allApplication
+
+            if int(allApplication["appid"]) == 10:
+                FinalApplication["IPSP"] = allApplication
+
+            if int(allApplication["appid"]) == 11:
+                pass
+                #FinalApplication[""] = allApplication
+
+            if int(allApplication["appid"]) == 12:
+                pass
+                #FinalApplication[""] = allApplication
+
+            if int(allApplication["appid"]) == 13:
+                pass
+                #FinalApplication[""] = allApplication
+
+            if int(allApplication["appid"]) == 14:
+                pass
+                #FinalApplication[""] = allApplication
+
+            if int(allApplication["appid"]) == 15:
+                pass
+                #FinalApplication[""] = allApplication
+
+        return FinalApplication
