@@ -613,7 +613,7 @@ Waiting for user input : """)
                     sys.exit()
 
                 except requests.exceptions.ConnectionError:
-                    self.viewsPrint("BadRequest", "Request Timeout... Connection Error '{}' with code: [{}]".format(php, result.status_code))
+                    self.viewsPrint("BadRequest", "Request Timeout... Connection Error '{}'".format(php))
                     sys.exit()
 
                 result.encoding = 'UTF-8'
@@ -735,7 +735,7 @@ Waiting for user input : """)
                     self.viewsPrint("ErrorRequest", "Request Timeout... TimeOut connection {}".format(php))
 
                 except requests.exceptions.ConnectionError:
-                    self.viewsPrint("ErrorRequest", "Request Timeout... Connection Error '{}' with code: [{}]".format(php, result.status_code))
+                    self.viewsPrint("ErrorRequest", "Request Timeout... Connection Error '{}'".format(php))
 
                 result.encoding = 'UTF-8'
                 try:

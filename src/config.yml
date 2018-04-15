@@ -18,13 +18,13 @@ attack_mode: bank_scan
 uID:  # <- Automatical uID for your account don't change /!\
 accessToken:  # <- Automatical accessToken for your account don't change /!\
 update: [SDK, FW, AV, BP, IPSP]
-msgLog: 'Hacked with <3 by PB'
+msgLog: 'You got hacked with <3 by #PB'
 
 
 
 # Socks 5 Proxy
 socks_enable: false
-socks_https: false
+socks_https: true
 socks_host: localhost
 socks_port: 1080
 socks_login: false

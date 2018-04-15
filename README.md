@@ -1,11 +1,20 @@
-# vHackOSBOT 🤖
+# PlatinumBot 🤖
 
 A Bot for vHackOS made in Python 🐍
+
+**Disclaimer: PlatinumBot is based on [vHackOSBot-Python](https://github.com/OlympicCode/vHackOSBot-Python) by [vBlackOut](https://github.com/vblackout) ([OlympicCode](https://olympiccode.net)), most features are his work.**
+
+## Features
+
+> **Socks 5 Proxy**
+You can tell the bot to use a Socks 5 Proxy for HTTP or HTTPS.
+When setting up a Proxy, please make shure to **NOT** use special characters in Username or Password
 
 ## Requirements
 
 * Python 2.7/Python 3.x
 * Requests
+* Requests[socks]
 * Ruamel.yaml
 * coloredlogs
 * terminaltables
@@ -13,10 +22,10 @@ A Bot for vHackOS made in Python 🐍
 ## Getting started
 
 Edit **config.yml** with your credentials.
-```python
-pip install -r requirements.txt
+```bash
+$ pip install -r requirements.txt
 
-python main.py
+$ python main.py
 ```
 ## Screenshots
 
