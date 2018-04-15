@@ -136,6 +136,32 @@ class Utils:
             self.attack_mode = self.Configuration["attack_mode"]
             self.update = self.Configuration["update"]
             self.msgremotelog = self.Configuration["msgLog"]
+            self.socks_enable = self.Configuration["socks_enable"]
+            self.socks_https = self.Configuration["socks_https"]
+            self.socks_host = str(self.Configuration["socks_host"])
+            self.socks_port = self.Configuration["socks_port"]
+            self.socks_login = self.Configuration["socks_login"]
+            self.socks_user = str(self.Configuration["socks_user"])
+            self.socks_pass = str(self.Configuration["socks_pass"])
+            if self.socks_enable is True:
+                if self.socks_login is True:
+                    if self.socks_https is True:
+                        self.socks_proxy = {
+                            'https': 'socks5://{}:{}@{}:{}'.format(self.socks_user, self.socks_pass, self.socks_host, self.socks_port)
+                        }
+                    else:
+                        self.socks_proxy = {
+                            'http': 'socks5://{}:{}@{}:{}'.format(self.socks_user, self.socks_pass, self.socks_host, self.socks_port)
+                        }
+                else:
+                    if self.socks_https:
+                        self.socks_proxy = {
+                            'https': 'socks5://{}:{}'.format(self.socks_host, self.socks_port)
+                        }
+                    else:
+                        self.socks_proxy = {
+                            'http': 'socks5://{}:{}'.format(self.socks_host, self.socks_port)
+                        }
         except KeyError as e:
             print("Error Configuration {}".format(e))
             sys.exit()
@@ -143,7 +169,7 @@ class Utils:
           print("please Change Username/Password to config.yml")
           sys.exit()
         self.user_agent = self.generateUA(self.username + self.password)
-        self.all_data = [['PlatinumBot v1.2 by AtjonTV | Based on vHackOSBot-Python by vBlackOut  [https://github.com/vBlackOut]']]
+        self.all_data = [['PlatinumBot v1.3 by AtjonTV | Based on vHackOSBot-Python by vBlackOut  [https://github.com/vBlackOut]']]
 
         try:
             if self.sync_mobile:
@@ -578,13 +604,16 @@ Waiting for user input : """)
 
                 # return just request don't login before.
                 try:
-                    result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
+                    if self.socks_enable is True:
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=5)
+                    else:
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
                     self.viewsPrint("BadRequest", "Request Timeout... TimeOut connection {}".format(php))
                     sys.exit()
 
                 except requests.exceptions.ConnectionError:
-                    self.viewsPrint("BadRequest", "Request Timeout... Connection Error '{}' with code: [{}]".format(php, url_login.status_code))
+                    self.viewsPrint("BadRequest", "Request Timeout... Connection Error '{}' with code: [{}]".format(php, result.status_code))
                     sys.exit()
 
                 result.encoding = 'UTF-8'
@@ -640,9 +669,13 @@ Waiting for user input : """)
                 # connect login.
                 self.request = requests.Session()
                 self.request.headers.update({'User-agent': self.user_agent})
+
                 url_login = self.Login('login.php', self.username, self.password)
                 try:
-                    result = self.request.get(url_login, timeout=3, verify=False)
+                    if self.socks_enable is True:
+                        result = self.request.get(url_login, proxies=self.socks_proxy, timeout=5, verify=False)
+                    else:
+                        result = self.request.get(url_login, timeout=5, verify=False)
                 except requests.exceptions.ConnectTimeout:
                     self.viewsPrint("ErrorRequest", "Request Timeout... TimeOut connection {}".format(php))
 
@@ -665,7 +698,10 @@ Waiting for user input : """)
 
                 # Create First request.
                 try:
-                    result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
+                    if self.socks_enable is True:
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=5)
+                    else:
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
                     self.viewsPrint("ErrorRequest", "Request Timeout... TimeOut connection {}".format(php))
 
@@ -691,19 +727,25 @@ Waiting for user input : """)
 
                 # return just request don't login before.
                 try:
-                    result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
+                    if self.socks_enable is True:
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=5)
+                    else:
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
                     self.viewsPrint("ErrorRequest", "Request Timeout... TimeOut connection {}".format(php))
 
                 except requests.exceptions.ConnectionError:
-                    self.viewsPrint("ErrorRequest", "Request Timeout... Connection Error '{}' with code: [{}]".format(php, url_login.status_code))
+                    self.viewsPrint("ErrorRequest", "Request Timeout... Connection Error '{}' with code: [{}]".format(php, result.status_code))
 
                 result.encoding = 'UTF-8'
                 try:
                     parseJson = result.json()
                 except:
                     time.sleep(3)
-                    result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
+                    if self.socks_enable is True:
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=5)
+                    else:
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                     result.encoding = 'UTF-8'
                     parseJson = result.json()
 

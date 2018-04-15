@@ -117,7 +117,7 @@ class Network():
             if money > 0:
                 reqMoney = self.ut.requestString("remotebanking.php", target=PlayerBruteIP, accesstoken=self.Configuration["accessToken"], action="100", amount=money,  lang="en")
                 self.ut.viewsPrint("showMsgCollectMoneyUser", "[{}] - \033[32m{} {} to '{}'\033[0m".format(os.path.basename(__file__), "\033[32myou collected +", money, PlayerBruteIP))
-                time.sleep(0.5)
+                time.sleep(1)
                 self.ChangeLog(PlayerBruteIP)
             else:
                 self.ut.viewsPrint("showMsgCollectMoneyUser", "[{}] - \033[33m{} {}$ from '{}'\033[0m".format(os.path.basename(__file__), "There is no money to get.", money, PlayerBruteIP))
