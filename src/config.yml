@@ -16,7 +16,7 @@ show_info: [All] # <- show the return bot print information
 attack_mode: bank_scan
 
 uID:  # <- Automatically added uID for your account don't change /!\
-accessToken:  # <- Automatically added accessToken for your account don't changee /!\
+accessToken:  # <- Automatically added accessToken for your account don't change /!\
 update: [SDK, FW, AV, BP, IPSP]
 msgLog: 'You got hacked with <3 by #PB'
 
