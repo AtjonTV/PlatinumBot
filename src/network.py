@@ -88,13 +88,13 @@ class Network():
                 self.ChangeLog(ip)
                 time.sleep(0.3)
 
-            # if result is return 2 your SDK level is == 0.
+            # if result is return 2 your Exploits are == 0.
             # not possible for you to hack, wait time to
-            # regenerate SDK.
+            # regenerate Exploits.
             elif resultHack == 2:
                 pass
         else:
-            self.ut.viewsPrint("showMsgErrorSdk=0", "[{}] - Can't hack, your SDK is 0.".format(os.path.basename(os.path.basename(__file__))))
+            self.ut.viewsPrint("showMsgErrorSdk=0", "[{}] - Can't hack, your don't have exploits.".format(os.path.basename(os.path.basename(__file__))))
             time.sleep(0.5)
             return 0
 
