@@ -129,7 +129,7 @@ class Utils:
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
-        self.client = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="preview-1.4")
+        self.client = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="preview-1.4-patch.3")
         try:
            
             self.username = str(self.Configuration["username"])
@@ -245,19 +245,19 @@ class Utils:
             self.account_info = self.requestStringNowait("update.php", accesstoken=self.Configuration["accessToken"])
             self.exploits = int(self.account_info["exploits"])
             progress = round(int(self.account_info["exp"]))/round(int(self.account_info["expreq"]))
-            account_information = [["your account information", "update information", "bot information"],
-                                   ["{0}: {1}\n{2}: {3}\n{4}: {5}\n{6}: {7}\n{8}: {9}\n{10}: {11}".format("Your exploits ", self.exploits,
-                                                                                                          "Your spam ", self.account_info["spam"],
-                                                                                                          "Your network speed ", self.account_info["inet"],
-                                                                                                          "Your money ", self.account_info["money"],
-                                                                                                          "Your IP ", self.account_info["ipaddress"],
-                                                                                                          "Your netcoins ", self.account_info["netcoins"]),
+            account_information = [["account information", "update information", "bot information"],
+                                   ["{0}: {1}\n{2}: {3}\n{4}: {5}\n{6}: {7}\n{8}: {9}\n{10}: {11}".format("Exploits ", self.exploits,
+                                                                                                          "Spam ", self.account_info["spam"],
+                                                                                                          "Network speed ", self.account_info["inet"],
+                                                                                                          "Money ", self.account_info["money"],
+                                                                                                          "IP ", self.account_info["ipaddress"],
+                                                                                                          "Netcoins ", self.account_info["netcoins"]),
 
-                                    "{0}: {1}\n{2}: {3}\n{4}: {5}\n{6}: {7}\n{8}: {9}, XP({10}%)".format("Your SDK ", self.account_info["sdk"],
-                                                                                                         "Your Firewall ", self.account_info["fw"],
-                                                                                                         "Your Antivirus ", self.account_info["av"],
-                                                                                                         "Your BruteForce ", self.account_info["brute"],
-                                                                                                         "Your level ", self.account_info["level"], round(progress*100, 1)),
+                                    "{0}: {1}\n{2}: {3}\n{4}: {5}\n{6}: {7}\n{8}: {9}, XP({10}%)".format("SDK ", self.account_info["sdk"],
+                                                                                                         "Firewall ", self.account_info["fw"],
+                                                                                                         "Antivirus ", self.account_info["av"],
+                                                                                                         "BruteForce ", self.account_info["brute"],
+                                                                                                         "Level ", self.account_info["level"], round(progress*100, 1)),
                                     "Name: PlatinumBot\nVersion: preview-1.4\nDeveloper: AtjonTV\nDeveloper: vBlackOut\nUsing Proxy: "+str(self.Configuration["socks_enable"])+"\nProxy IP: "+str(self.Configuration["socks_host"])]]
         except KeyError:
           account_information = [["your account information", "update information", "bot information"], ["Error", "Error"]]
