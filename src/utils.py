@@ -34,6 +34,8 @@ except:
 import time
 import contextlib
 
+from raven import Client
+
 #logger = logging.getLogger(__name__)
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -127,7 +129,9 @@ class Utils:
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
+        self.client = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="preview-1.4")
         try:
+           
             self.username = str(self.Configuration["username"])
             self.password = str(self.Configuration["password"])
             self.debug = self.Configuration["debug"]
@@ -169,7 +173,7 @@ class Utils:
           print("please Change Username/Password to config.yml")
           sys.exit()
         self.user_agent = self.generateUA(self.username + self.password)
-        self.all_data = [['PlatinumBot v1.4 by AtjonTV | Based on vHackOSBot-Python by vBlackOut  [https://github.com/vBlackOut]']]
+        self.all_data = [['PlatinumBot v1.4 | Based on vHackOSBot-Python']]
 
         try:
             if self.sync_mobile:
@@ -243,23 +247,21 @@ class Utils:
             progress = round(int(self.account_info["exp"]))/round(int(self.account_info["expreq"]))
             account_information = [["your account information", "update information", "bot information"],
                                    ["{0}: {1}\n{2}: {3}\n{4}: {5}\n{6}: {7}\n{8}: {9}\n{10}: {11}".format("Your exploits ", self.exploits,
-                                                                                                              "Your spam ", self.account_info["spam"],
-                                                                                                              "Your network speed ", self.account_info["inet"],
-                                                                                                              "Your money ", self.account_info["money"],
-                                                                                                              "Your IP ", self.account_info["ipaddress"],
-                                                                                                              "Your netcoins ", self.account_info["netcoins"]),
+                                                                                                          "Your spam ", self.account_info["spam"],
+                                                                                                          "Your network speed ", self.account_info["inet"],
+                                                                                                          "Your money ", self.account_info["money"],
+                                                                                                          "Your IP ", self.account_info["ipaddress"],
+                                                                                                          "Your netcoins ", self.account_info["netcoins"]),
 
-                                   "{}: {}\n{}: {}\n{}: {}\n{}: {}\n{}: {}, XP({}%)".format("Your SDK ", self.account_info["sdk"],
+                                    "{0}: {1}\n{2}: {3}\n{4}: {5}\n{6}: {7}\n{8}: {9}, XP({10}%)".format("Your SDK ", self.account_info["sdk"],
                                                                                                          "Your Firewall ", self.account_info["fw"],
                                                                                                          "Your Antivirus ", self.account_info["av"],
                                                                                                          "Your BruteForce ", self.account_info["brute"],
-                                                                                                         "Your level ", self.account_info["level"], round(progress*100, 1),
-                                    "{}: {}\n{}: {}\n{}: {}\n{}: {}\n{}: {}".format("Name", "PlantinumBot",
-                                                                                                "Version", "1.4",
-                                                                                                "Developer", "AtjonTV"
-                                                                                                "Using Proxy", self.socks_enable))]]
+                                                                                                         "Your level ", self.account_info["level"], round(progress*100, 1)),
+                                    "Name: PlatinumBot\nVersion: preview-1.4\nDeveloper: AtjonTV\nDeveloper: vBlackOut\nUsing Proxy: "+str(self.Configuration["socks_enable"])]]
         except KeyError:
-          account_information = [["your account information", "update information"], ["Error", "Error"]]
+          account_information = [["your account information", "update information", "bot information"], ["Error", "Error"]]
+          client.captureException()
           sys.exit()
         table1 = SingleTable(data)
         table2 = SingleTable(account_information)
@@ -582,10 +584,12 @@ Waiting for user input : """)
                 try:
                     result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
+
                     self.viewsPrint("ErrorRequest", "Request Timeout... TimeOut connection {}".format(php))
                     exit(0)
 
                 except requests.exceptions.ConnectionError:
+
                     self.viewsPrint("ErrorRequest", "Request Timeout... Connection Error '{}' with code: [{}]".format(php, url_login.status_code))
                     exit(0)
 
@@ -613,17 +617,20 @@ Waiting for user input : """)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
-                    self.viewsPrint("BadRequest", "Request Timeout... TimeOut connection {}".format(php))
+
+                    self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
                     sys.exit()
 
                 except requests.exceptions.ConnectionError:
-                    self.viewsPrint("BadRequest", "Request Timeout... Connection Error '{}'".format(php))
+
+                    self.viewsPrint("BadRequest", "Error while requesting '{}'".format(php))
                     sys.exit()
 
                 result.encoding = 'UTF-8'
                 try:
                     parseJson = result.json()
                 except ValueError:
+
                     self.viewsPrint("ErrorJson", "Closing bot upon bad request...")
                     sys.exit()
 
@@ -681,10 +688,10 @@ Waiting for user input : """)
                     else:
                         result = self.request.get(url_login, timeout=5, verify=False)
                 except requests.exceptions.ConnectTimeout:
-                    self.viewsPrint("ErrorRequest", "Request Timeout... TimeOut connection {}".format(php))
+                    self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
 
                 except requests.exceptions.ConnectionError:
-                    self.viewsPrint("ErrorRequest", "Request Timeout... Connection Error '{}' with code: [{}]".format('login.php', url_login.status_code))
+                    self.viewsPrint("ErrorRequest", "Error while requesting '{}' with code: [{}]".format('login.php', url_login.status_code))
 
                 result.encoding = 'UTF-8'
                 parseJson = result.json()
@@ -707,10 +714,12 @@ Waiting for user input : """)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
-                    self.viewsPrint("ErrorRequest", "Request Timeout... TimeOut connection {}".format(php))
+
+                    self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
 
                 except requests.exceptions.ConnectionError:
-                    self.viewsPrint("ErrorRequest", "Request Timeout... Connection Error '{}' with code: [{}]".format(php, url_login.status_code))
+
+                    self.viewsPrint("ErrorRequest", "Error while requesting '{}' with code: [{}]".format(php, url_login.status_code))
 
                 if kwargs["debug"] is True:
                     logging.info(result.json())
@@ -736,10 +745,12 @@ Waiting for user input : """)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
-                    self.viewsPrint("ErrorRequest", "Request Timeout... TimeOut connection {}".format(php))
+
+                    self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
 
                 except requests.exceptions.ConnectionError:
-                    self.viewsPrint("ErrorRequest", "Request Timeout... Connection Error '{}'".format(php))
+
+                    self.viewsPrint("BadRequest", "Error while requesting '{}'".format(php))
 
                 result.encoding = 'UTF-8'
                 try:

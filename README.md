@@ -29,7 +29,7 @@ $ python main.py
 ```
 ## Screenshots
 
-[![PlatinumBot Preview](http://dl.atvg-studios.at/_images_png/PlatinumBot.png)](https://gitlab.atvg-studios.at/root/PlatinumBot)
+[![PlatinumBot Preview](http://dl.atvg-studios.at/_images_png/PlatinumBot-preview.png)](https://gitlab.atvg-studios.at/root/PlatinumBot)
 
 ## Contributing
 
