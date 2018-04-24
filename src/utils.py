@@ -129,7 +129,7 @@ class Utils:
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
-        self.client = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="release-1.4-patch.0")
+        self.client = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="preview-1.5-patch.0")
         try:
            
             self.username = str(self.Configuration["username"])
@@ -147,24 +147,67 @@ class Utils:
             self.socks_login = self.Configuration["socks_login"]
             self.socks_user = str(self.Configuration["socks_user"])
             self.socks_pass = str(self.Configuration["socks_pass"])
+            self.socks_five_enable = self.Configuration["socks5_enable"]
+            self.socks_five_https = self.Configuration["socks5_https"]
+            self.socks_five_host = str(self.Configuration["socks5_host"])
+            self.socks_five_port = self.Configuration["socks5_port"]
+            self.socks_five_login = self.Configuration["socks5_login"]
+            self.socks_five_user = str(self.Configuration["socks5_user"])
+            self.socks_five_pass = str(self.Configuration["socks5_pass"])
+            self.socksName = "None"
+            self.socksHTTPS = ""
+            self.socksLogin = ""
             if self.socks_enable is True:
+                self.socksName = "Socks4"
                 if self.socks_login is True:
+                    self.socksLogin = "True"
                     if self.socks_https is True:
+                        self.socksHTTPS = "True"
                         self.socks_proxy = {
-                            'https': 'socks5://{}:{}@{}:{}'.format(self.socks_user, self.socks_pass, self.socks_host, self.socks_port)
+                            'https': 'socks4://{}:{}@{}:{}'.format(self.socks_user, self.socks_pass, self.socks_host, self.socks_port)
                         }
                     else:
+                        self.socksHTTPS = "False"
                         self.socks_proxy = {
-                            'http': 'socks5://{}:{}@{}:{}'.format(self.socks_user, self.socks_pass, self.socks_host, self.socks_port)
+                            'http': 'socks4://{}:{}@{}:{}'.format(self.socks_user, self.socks_pass, self.socks_host, self.socks_port)
                         }
                 else:
+                    self.socksLogin = "False"
                     if self.socks_https:
+                        self.socksHTTPS = "True"
                         self.socks_proxy = {
-                            'https': 'socks5://{}:{}'.format(self.socks_host, self.socks_port)
+                            'https': 'socks4://{}:{}'.format(self.socks_host, self.socks_port)
                         }
                     else:
+                        self.socksHTTPS = "False"
                         self.socks_proxy = {
-                            'http': 'socks5://{}:{}'.format(self.socks_host, self.socks_port)
+                            'http': 'socks4://{}:{}'.format(self.socks_host, self.socks_port)
+                        }
+            if self.socks_five_enable is True:
+                self.socksName = "Socks5"
+                if self.socks_five_login is True:
+                    self.socksLogin = "True"
+                    if self.socks_five_https is True:
+                        self.socksHTTPS = "True"
+                        self.socks_proxy = {
+                                'https': 'socks5://{}:{}@{}:{}'.format(self.socks_five_user, self.socks_five_pass, self.socks_five_host, self.socks_five_port)
+                        }
+                    else:
+                        self.socksHTTPS = "False"
+                        self.socks_proxy = {
+                                'http': 'socks5://{}:{}@{}:{}'.format(self.socks_five_user, self.socks_five_pass, self.socks_five_host, self.socks_five_port)
+                        }
+                else:
+                    self.socksLogin = "False"
+                    if self.socks_five_https:
+                        self.socksHTTPS = "True"
+                        self.socks_proxy = {
+                                'https': 'socks5://{}:{}'.format(self.socks_five_host, self.socks_five_port)
+                        }
+                    else:
+                        self.socksHTTPS = "False"
+                        self.socks_proxy = {
+                                'http': 'socks5://{}:{}'.format(self.socks_five_host, self.socks_five_port)
                         }
         except KeyError as e:
             print("Error Configuration {}".format(e))
@@ -173,7 +216,7 @@ class Utils:
           print("please Change Username/Password to config.yml")
           sys.exit()
         self.user_agent = self.generateUA(self.username + self.password)
-        self.all_data = [['PlatinumBot v1.4 | Based on vHackOSBot-Python']]
+        self.all_data = [['PlatinumBot v1.5 | Based on vHackOSBot-Python']]
 
         try:
             if self.sync_mobile:
@@ -245,7 +288,7 @@ class Utils:
             self.account_info = self.requestStringNowait("update.php", accesstoken=self.Configuration["accessToken"])
             self.exploits = int(self.account_info["exploits"])
             progress = round(int(self.account_info["exp"]))/round(int(self.account_info["expreq"]))
-            account_information = [["account information", "update information", "bot information"],
+            account_information = [["account information", "update information", "bot information", "proxy information"],
                                    ["{0}: {1}\n{2}: {3}\n{4}: {5}\n{6}: {7}\n{8}: {9}\n{10}: {11}".format("Exploits ", self.exploits,
                                                                                                           "Spam ", self.account_info["spam"],
                                                                                                           "Network speed ", self.account_info["inet"],
@@ -258,7 +301,8 @@ class Utils:
                                                                                                          "Antivirus ", self.account_info["av"],
                                                                                                          "BruteForce ", self.account_info["brute"],
                                                                                                          "Level ", self.account_info["level"], round(progress*100, 1)),
-                                    "Name: PlatinumBot\nVersion: 1.4\nDeveloper: AtjonTV\nDeveloper: vBlackOut\nProxy Enabled: "+str(self.Configuration["socks_enable"])+"\nProxy IP: "+str(self.Configuration["socks_host"])]]
+                                    "{}: {}\n{}: {}\n{}: {}\n{}: {}".format("Name", "PlatinumBot", "Version", "preview-1.5", "Developer", "AtjonTV", "Developer", "vBlackOut"),
+                                    "{}: {}\n{}: {}\n{}: {}\n{} : {}".format("Proxy",  self.socksName, "HTTPS", self.socksHTTPS, "Login", self.socksLogin, "Host", "localhost")]]
         except KeyError:
           account_information = [["your account information", "update information", "bot information"], ["Error", "Error"]]
           client.captureException()
