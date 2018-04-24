@@ -129,7 +129,7 @@ class Utils:
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
-        self.client = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="preview-1.5-patch.0")
+        self.sentryClient = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="preview-1.5-patch.1")
         try:
            
             self.username = str(self.Configuration["username"])
@@ -235,12 +235,16 @@ class Utils:
         except KeyError:
             self.uID = None
 
+    def logError(self, error):
+        self.sentryClient.captureMessage(error)
+
     def readConfiguration(self):
       # open configuration
       with open("config.yml", 'r') as stream:
           try:
               Configuration = yaml.load(stream, Loader=yaml.RoundTripLoader)
           except yaml.YAMLError as exc:
+                self.sentryClient.captureException();
               self.viewsPrint("ErrorConfiguration", "{} [{}]".format("Error in your config.yml please check in", exc))
               sys.exit()
 
@@ -305,7 +309,7 @@ class Utils:
                                     "{}: {}\n{}: {}\n{}: {}\n{} : {}".format("Proxy",  self.socksName, "HTTPS", self.socksHTTPS, "Login", self.socksLogin, "Host", "localhost")]]
         except KeyError:
           account_information = [["your account information", "update information", "bot information"], ["Error", "Error"]]
-          client.captureException()
+          self.sentryClient.captureException()
           sys.exit()
         table1 = SingleTable(data)
         table2 = SingleTable(account_information)
@@ -393,8 +397,10 @@ Waiting for user input : """)
                                     sys.exit()
                                 break
                     except (KeyboardInterrupt, EOFError):
+                        self.sentryClient.captureException()
                         pass
         except IOError as e:
+            self.sentryClient.captureException()
             pass
 
     def tuntin(self, secs):
@@ -444,11 +450,12 @@ Waiting for user input : """)
             try:
                 result = self.request.get(url_login, timeout=5, verify=False)
             except requests.exceptions.ConnectTimeout:
-                self.viewsPrint("ErrorRequest", "Request and Connection Timeout...'{}'".format(url))
+                self.viewsPrint("ErrorRequest", "Timeout while requesting '{}'".format(url))
                 sys.exit()
 
             except requests.exceptions.ConnectionError:
-                self.viewsPrint("ErorRequest", "Request Timeout... Connection Error '{}'".format(url))
+            self.sentryClient.captureException();
+                self.viewsPrint("ErorRequest", "Error while requesting '{}'".format(url))
                 sys.exit()
 
             result.encoding = 'UTF-8'
@@ -547,6 +554,7 @@ Waiting for user input : """)
         try:
             code_return = code_return["result"]
         except (TypeError, IndexError):
+            self.sentryClient.captureException();
             code_return = 0
 
         t = None
@@ -603,11 +611,12 @@ Waiting for user input : """)
                 try:
                     result = self.request.get(url_login, timeout=5, verify=False)
                 except requests.exceptions.ConnectTimeout:
-                    self.viewsPrint("ErrorRequest", "Request and Connection Timed out... {}".format(php))
+                    self.viewsPrint("ErrorRequest", "Timeout while requesting '{}'".format(php))
                     sys.exit()
 
                 except requests.exceptions.ConnectionError:
-                    self.viewsPrint("ErrorRequest", "Request Timeout... Connection Error '{}' with code: [{}]".format('login.php', url_login.status_code))
+                    self.sentryClient.captureException();
+                    self.viewsPrint("ErrorRequest", "Error while requesting '{}' with code: [{}]".format('login.php', url_login.status_code))
                     sys.exit()
 
                 result.encoding = 'UTF-8'
@@ -628,7 +637,7 @@ Waiting for user input : """)
                 try:
                     result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("ErrorRequest", "Request Timeout... TimeOut connection {}".format(php))
                     exit(0)
 
@@ -661,12 +670,12 @@ Waiting for user input : """)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
                     sys.exit()
 
                 except requests.exceptions.ConnectionError:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Error while requesting '{}'".format(php))
                     sys.exit()
 
@@ -674,7 +683,7 @@ Waiting for user input : """)
                 try:
                     parseJson = result.json()
                 except ValueError:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("ErrorJson", "Closing bot upon bad request...")
                     sys.exit()
 
@@ -732,9 +741,11 @@ Waiting for user input : """)
                     else:
                         result = self.request.get(url_login, timeout=5, verify=False)
                 except requests.exceptions.ConnectTimeout:
+                    self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
 
                 except requests.exceptions.ConnectionError:
+                    self.sentryClient.captureException();
                     self.viewsPrint("ErrorRequest", "Error while requesting '{}' with code: [{}]".format('login.php', url_login.status_code))
 
                 result.encoding = 'UTF-8'
@@ -758,11 +769,11 @@ Waiting for user input : """)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
 
                 except requests.exceptions.ConnectionError:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("ErrorRequest", "Error while requesting '{}' with code: [{}]".format(php, url_login.status_code))
 
                 if kwargs["debug"] is True:
@@ -789,11 +800,11 @@ Waiting for user input : """)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
 
                 except requests.exceptions.ConnectionError:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Error while requesting '{}'".format(php))
 
                 result.encoding = 'UTF-8'

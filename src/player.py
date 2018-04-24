@@ -25,6 +25,7 @@ class Player():
                 Application["require"] = ApplicationUp[1]["require"]
 
             except KeyError as e:
+                self.ut.sentryClient.captureException();
                 Application["baseprice"] = None
                 Application["level"] = ApplicationUp[1]["level"]
                 Application["price"] = ApplicationUp[1]["price"]
