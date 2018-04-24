@@ -88,8 +88,8 @@ class Network():
                 self.ChangeLog(ip)
                 time.sleep(0.3)
 
-            # if result is return 2 you Exploits are == 0.
-            # don't possibly for you to hack wait time for
+            # if result is return 2 your Exploits are == 0.
+            # not possible for you to hack, wait time to
             # regenerate Exploits.
             elif resultHack == 2:
                 pass
