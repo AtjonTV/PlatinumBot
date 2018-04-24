@@ -17,16 +17,14 @@ attack_mode: bank_scan
 
 uID:  # <- Automatically added uID for your account don't change /!\
 accessToken:  # <- Automatically added accessToken for your account don't change /!\
-update: [SDK, FW, AV, BP, IPSP]
-msgLog: 'You got hacked with <3 by #PB'
-
-
+update: [SDK, FW, AV, BP, IPSP] // All Apps: AV, FW, SPAM, BRUTE, BP, SDK, IPSP
+msgLog: 'You got hacked with <3 by #PB' # <- It is recommented to change this message /!\
 
 # Socks 5 Proxy
-socks_enable: false
-socks_https: true
-socks_host: localhost
-socks_port: 1080
-socks_login: false
-socks_user:
-socks_pass:
+socks_enable: false # <- if true it will use the config below
+socks_https: true # <- this should only be true when the proxy supports HTTPS/SSL/TLS
+socks_host: localhost # <- the server's ip address or domain name
+socks_port: 1080 # <- the port the proxy is running on
+socks_login: false # <- this should only be true when the proxy needs a username and password
+socks_user: # <- the username for the proxy (DO NOT USE SPECIAL CHARACTERS HERE)
+socks_pass: # <- the password for the proxy user (DO NOT USE SPECIAL CHARACTERS HERE)

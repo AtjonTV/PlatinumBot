@@ -169,7 +169,7 @@ class Utils:
           print("please Change Username/Password to config.yml")
           sys.exit()
         self.user_agent = self.generateUA(self.username + self.password)
-        self.all_data = [['PlatinumBot v1.3 by AtjonTV | Based on vHackOSBot-Python by vBlackOut  [https://github.com/vBlackOut]']]
+        self.all_data = [['PlatinumBot v1.4 by AtjonTV | Based on vHackOSBot-Python by vBlackOut  [https://github.com/vBlackOut]']]
 
         try:
             if self.sync_mobile:
@@ -241,7 +241,7 @@ class Utils:
             self.account_info = self.requestStringNowait("update.php", accesstoken=self.Configuration["accessToken"])
             self.exploits = int(self.account_info["exploits"])
             progress = round(int(self.account_info["exp"]))/round(int(self.account_info["expreq"]))
-            account_information = [["your account information", "update information"],
+            account_information = [["your account information", "update information", "bot information"],
                                    ["{0}: {1}\n{2}: {3}\n{4}: {5}\n{6}: {7}\n{8}: {9}\n{10}: {11}".format("Your exploits ", self.exploits,
                                                                                                               "Your spam ", self.account_info["spam"],
                                                                                                               "Your network speed ", self.account_info["inet"],
@@ -253,7 +253,11 @@ class Utils:
                                                                                                          "Your Firewall ", self.account_info["fw"],
                                                                                                          "Your Antivirus ", self.account_info["av"],
                                                                                                          "Your BruteForce ", self.account_info["brute"],
-                                                                                                         "Your level ", self.account_info["level"], round(progress*100, 1))]]
+                                                                                                         "Your level ", self.account_info["level"], round(progress*100, 1),
+                                    "{}: {}\n{}: {}\n{}: {}\n{}: {}\n{}: {}".format("Name", "PlantinumBot",
+                                                                                                "Version", "1.4",
+                                                                                                "Developer", "AtjonTV"
+                                                                                                "Using Proxy", self.socks_enable))]]
         except KeyError:
           account_information = [["your account information", "update information"], ["Error", "Error"]]
           sys.exit()
