@@ -94,7 +94,7 @@ class Network():
             elif resultHack == 2:
                 pass
         else:
-            self.ut.viewsPrint("showMsgErrorSdk=0", "[{}] - Can't hack, your don't have exploits.".format(os.path.basename(os.path.basename(__file__))))
+            self.ut.viewsPrint("showMsgErrorSdk=0", "[{}] - Can't hack, you don't have exploits.".format(os.path.basename(os.path.basename(__file__))))
             time.sleep(0.5)
             return 0
 
