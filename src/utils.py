@@ -129,7 +129,7 @@ class Utils:
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
-        self.client = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="preview-1.4-patch.4")
+        self.client = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="release-1.4-patch.0")
         try:
            
             self.username = str(self.Configuration["username"])
@@ -258,7 +258,7 @@ class Utils:
                                                                                                          "Antivirus ", self.account_info["av"],
                                                                                                          "BruteForce ", self.account_info["brute"],
                                                                                                          "Level ", self.account_info["level"], round(progress*100, 1)),
-                                    "Name: PlatinumBot\nVersion: preview-1.4\nDeveloper: AtjonTV\nDeveloper: vBlackOut\nProxy Enabled: "+str(self.Configuration["socks_enable"])+"\nProxy IP: "+str(self.Configuration["socks_host"])]]
+                                    "Name: PlatinumBot\nVersion: 1.4\nDeveloper: AtjonTV\nDeveloper: vBlackOut\nProxy Enabled: "+str(self.Configuration["socks_enable"])+"\nProxy IP: "+str(self.Configuration["socks_host"])]]
         except KeyError:
           account_information = [["your account information", "update information", "bot information"], ["Error", "Error"]]
           client.captureException()
