@@ -23,6 +23,7 @@ When configuring the proxy, please make sure to **NOT** use special characters i
 * Ruamel.yaml
 * coloredlogs
 * terminaltables
+* raven (Sentry Client)
 
 ## Getting started
 

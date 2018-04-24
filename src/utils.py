@@ -129,7 +129,7 @@ class Utils:
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
-        self.sentryClient = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="preview-1.5-patch.1")
+        self.sentryClient = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="preview-1.5-patch.2")
         try:
            
             self.username = str(self.Configuration["username"])
@@ -244,7 +244,7 @@ class Utils:
           try:
               Configuration = yaml.load(stream, Loader=yaml.RoundTripLoader)
           except yaml.YAMLError as exc:
-                self.sentryClient.captureException();
+              self.sentryClient.captureException();
               self.viewsPrint("ErrorConfiguration", "{} [{}]".format("Error in your config.yml please check in", exc))
               sys.exit()
 
@@ -454,7 +454,7 @@ Waiting for user input : """)
                 sys.exit()
 
             except requests.exceptions.ConnectionError:
-            self.sentryClient.captureException();
+                self.sentryClient.captureException();
                 self.viewsPrint("ErorRequest", "Error while requesting '{}'".format(url))
                 sys.exit()
 

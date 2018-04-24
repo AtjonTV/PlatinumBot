@@ -4,3 +4,4 @@ coloredlogs==9.0
 terminaltables==3.1.0
 requests[socks]==2.14.2
 pysocks==1.6.8
+raven==6.7.0
