@@ -10,7 +10,6 @@ A Bot for vHackOS made in Python 🐍
 You can tell the bot to use a Socks 4 Proxy, HTTP, or HTTPS.  
 When configuring the proxy, please make sure to **NOT** use special characters in the username or password
 
-
 > **Socks 5 Proxy**  
 You can tell the bot to use a Socks 5 Proxy, HTTP, or HTTPS.  
 When configuring the proxy, please make sure to **NOT** use special characters in the username or password

@@ -216,7 +216,7 @@ class Utils:
           print("please Change Username/Password to config.yml")
           sys.exit()
         self.user_agent = self.generateUA(self.username + self.password)
-        self.all_data = [['PlatinumBot v1.5 | Based on vHackOSBot-Python']]
+        self.all_data = [['PlatinumBot | Based on vHackOSBot-Python']]
 
         try:
             if self.sync_mobile:
