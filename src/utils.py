@@ -258,7 +258,7 @@ class Utils:
                                                                                                          "Your Antivirus ", self.account_info["av"],
                                                                                                          "Your BruteForce ", self.account_info["brute"],
                                                                                                          "Your level ", self.account_info["level"], round(progress*100, 1)),
-                                    "Name: PlatinumBot\nVersion: preview-1.4\nDeveloper: AtjonTV\nDeveloper: vBlackOut\nUsing Proxy: "+str(self.Configuration["socks_enable"])]]
+                                    "Name: PlatinumBot\nVersion: preview-1.4\nDeveloper: AtjonTV\nDeveloper: vBlackOut\nUsing Proxy: "+str(self.Configuration["socks_enable"])+"\nProxy IP: "+str(self.Configuration["socks_host"])]]
         except KeyError:
           account_information = [["your account information", "update information", "bot information"], ["Error", "Error"]]
           client.captureException()
