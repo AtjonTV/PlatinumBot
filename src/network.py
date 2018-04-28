@@ -113,6 +113,7 @@ class Network():
             try:
                 money = int(reqBanking["money"])
             except KeyError:
+                self.ut.sentryClient.captureException();
                 money = 0
             if money > 0:
                 reqMoney = self.ut.requestString("remotebanking.php", target=PlayerBruteIP, accesstoken=self.Configuration["accessToken"], action="100", amount=money,  lang="en")

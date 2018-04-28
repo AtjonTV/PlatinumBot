@@ -129,7 +129,7 @@ class Utils:
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
-        self.client = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="release-1.4-patch.0")
+        self.sentryClient = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="release-1.5-patch.0")
         try:
            
             self.username = str(self.Configuration["username"])
@@ -147,24 +147,67 @@ class Utils:
             self.socks_login = self.Configuration["socks_login"]
             self.socks_user = str(self.Configuration["socks_user"])
             self.socks_pass = str(self.Configuration["socks_pass"])
+            self.socks_five_enable = self.Configuration["socks5_enable"]
+            self.socks_five_https = self.Configuration["socks5_https"]
+            self.socks_five_host = str(self.Configuration["socks5_host"])
+            self.socks_five_port = self.Configuration["socks5_port"]
+            self.socks_five_login = self.Configuration["socks5_login"]
+            self.socks_five_user = str(self.Configuration["socks5_user"])
+            self.socks_five_pass = str(self.Configuration["socks5_pass"])
+            self.socksName = "None"
+            self.socksHTTPS = ""
+            self.socksLogin = ""
             if self.socks_enable is True:
+                self.socksName = "Socks4"
                 if self.socks_login is True:
+                    self.socksLogin = "True"
                     if self.socks_https is True:
+                        self.socksHTTPS = "True"
                         self.socks_proxy = {
-                            'https': 'socks5://{}:{}@{}:{}'.format(self.socks_user, self.socks_pass, self.socks_host, self.socks_port)
+                            'https': 'socks4://{}:{}@{}:{}'.format(self.socks_user, self.socks_pass, self.socks_host, self.socks_port)
                         }
                     else:
+                        self.socksHTTPS = "False"
                         self.socks_proxy = {
-                            'http': 'socks5://{}:{}@{}:{}'.format(self.socks_user, self.socks_pass, self.socks_host, self.socks_port)
+                            'http': 'socks4://{}:{}@{}:{}'.format(self.socks_user, self.socks_pass, self.socks_host, self.socks_port)
                         }
                 else:
+                    self.socksLogin = "False"
                     if self.socks_https:
+                        self.socksHTTPS = "True"
                         self.socks_proxy = {
-                            'https': 'socks5://{}:{}'.format(self.socks_host, self.socks_port)
+                            'https': 'socks4://{}:{}'.format(self.socks_host, self.socks_port)
                         }
                     else:
+                        self.socksHTTPS = "False"
                         self.socks_proxy = {
-                            'http': 'socks5://{}:{}'.format(self.socks_host, self.socks_port)
+                            'http': 'socks4://{}:{}'.format(self.socks_host, self.socks_port)
+                        }
+            if self.socks_five_enable is True:
+                self.socksName = "Socks5"
+                if self.socks_five_login is True:
+                    self.socksLogin = "True"
+                    if self.socks_five_https is True:
+                        self.socksHTTPS = "True"
+                        self.socks_proxy = {
+                                'https': 'socks5://{}:{}@{}:{}'.format(self.socks_five_user, self.socks_five_pass, self.socks_five_host, self.socks_five_port)
+                        }
+                    else:
+                        self.socksHTTPS = "False"
+                        self.socks_proxy = {
+                                'http': 'socks5://{}:{}@{}:{}'.format(self.socks_five_user, self.socks_five_pass, self.socks_five_host, self.socks_five_port)
+                        }
+                else:
+                    self.socksLogin = "False"
+                    if self.socks_five_https:
+                        self.socksHTTPS = "True"
+                        self.socks_proxy = {
+                                'https': 'socks5://{}:{}'.format(self.socks_five_host, self.socks_five_port)
+                        }
+                    else:
+                        self.socksHTTPS = "False"
+                        self.socks_proxy = {
+                                'http': 'socks5://{}:{}'.format(self.socks_five_host, self.socks_five_port)
                         }
         except KeyError as e:
             print("Error Configuration {}".format(e))
@@ -173,7 +216,7 @@ class Utils:
           print("please Change Username/Password to config.yml")
           sys.exit()
         self.user_agent = self.generateUA(self.username + self.password)
-        self.all_data = [['PlatinumBot v1.4 | Based on vHackOSBot-Python']]
+        self.all_data = [['PlatinumBot | Based on vHackOSBot-Python']]
 
         try:
             if self.sync_mobile:
@@ -192,12 +235,16 @@ class Utils:
         except KeyError:
             self.uID = None
 
+    def logError(self, error):
+        self.sentryClient.captureMessage(error)
+
     def readConfiguration(self):
       # open configuration
       with open("config.yml", 'r') as stream:
           try:
               Configuration = yaml.load(stream, Loader=yaml.RoundTripLoader)
           except yaml.YAMLError as exc:
+              self.sentryClient.captureException();
               self.viewsPrint("ErrorConfiguration", "{} [{}]".format("Error in your config.yml please check in", exc))
               sys.exit()
 
@@ -245,7 +292,7 @@ class Utils:
             self.account_info = self.requestStringNowait("update.php", accesstoken=self.Configuration["accessToken"])
             self.exploits = int(self.account_info["exploits"])
             progress = round(int(self.account_info["exp"]))/round(int(self.account_info["expreq"]))
-            account_information = [["account information", "update information", "bot information"],
+            account_information = [["account information", "update information", "bot information", "proxy information"],
                                    ["{0}: {1}\n{2}: {3}\n{4}: {5}\n{6}: {7}\n{8}: {9}\n{10}: {11}".format("Exploits ", self.exploits,
                                                                                                           "Spam ", self.account_info["spam"],
                                                                                                           "Network speed ", self.account_info["inet"],
@@ -258,10 +305,11 @@ class Utils:
                                                                                                          "Antivirus ", self.account_info["av"],
                                                                                                          "BruteForce ", self.account_info["brute"],
                                                                                                          "Level ", self.account_info["level"], round(progress*100, 1)),
-                                    "Name: PlatinumBot\nVersion: 1.4\nDeveloper: AtjonTV\nDeveloper: vBlackOut\nProxy Enabled: "+str(self.Configuration["socks_enable"])+"\nProxy IP: "+str(self.Configuration["socks_host"])]]
+                                    "{}: {}\n{}: {}\n{}: {}\n{}: {}".format("Name", "PlatinumBot", "Version", "1.5 (Patch 0)", "Developer", "AtjonTV", "Developer", "vBlackOut"),
+                                    "{}: {}\n{}: {}\n{}: {}\n{} : {}".format("Proxy",  self.socksName, "HTTPS", self.socksHTTPS, "Login", self.socksLogin, "Host", "localhost")]]
         except KeyError:
           account_information = [["your account information", "update information", "bot information"], ["Error", "Error"]]
-          client.captureException()
+          self.sentryClient.captureException()
           sys.exit()
         table1 = SingleTable(data)
         table2 = SingleTable(account_information)
@@ -349,8 +397,10 @@ Waiting for user input : """)
                                     sys.exit()
                                 break
                     except (KeyboardInterrupt, EOFError):
+                        self.sentryClient.captureException()
                         pass
         except IOError as e:
+            self.sentryClient.captureException()
             pass
 
     def tuntin(self, secs):
@@ -400,11 +450,12 @@ Waiting for user input : """)
             try:
                 result = self.request.get(url_login, timeout=5, verify=False)
             except requests.exceptions.ConnectTimeout:
-                self.viewsPrint("ErrorRequest", "Request and Connection Timeout...'{}'".format(url))
+                self.viewsPrint("ErrorRequest", "Timeout while requesting '{}'".format(url))
                 sys.exit()
 
             except requests.exceptions.ConnectionError:
-                self.viewsPrint("ErorRequest", "Request Timeout... Connection Error '{}'".format(url))
+                self.sentryClient.captureException();
+                self.viewsPrint("ErorRequest", "Error while requesting '{}'".format(url))
                 sys.exit()
 
             result.encoding = 'UTF-8'
@@ -503,6 +554,7 @@ Waiting for user input : """)
         try:
             code_return = code_return["result"]
         except (TypeError, IndexError):
+            self.sentryClient.captureException();
             code_return = 0
 
         t = None
@@ -559,11 +611,12 @@ Waiting for user input : """)
                 try:
                     result = self.request.get(url_login, timeout=5, verify=False)
                 except requests.exceptions.ConnectTimeout:
-                    self.viewsPrint("ErrorRequest", "Request and Connection Timed out... {}".format(php))
+                    self.viewsPrint("ErrorRequest", "Timeout while requesting '{}'".format(php))
                     sys.exit()
 
                 except requests.exceptions.ConnectionError:
-                    self.viewsPrint("ErrorRequest", "Request Timeout... Connection Error '{}' with code: [{}]".format('login.php', url_login.status_code))
+                    self.sentryClient.captureException();
+                    self.viewsPrint("ErrorRequest", "Error while requesting '{}' with code: [{}]".format('login.php', url_login.status_code))
                     sys.exit()
 
                 result.encoding = 'UTF-8'
@@ -584,7 +637,7 @@ Waiting for user input : """)
                 try:
                     result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("ErrorRequest", "Request Timeout... TimeOut connection {}".format(php))
                     exit(0)
 
@@ -617,12 +670,12 @@ Waiting for user input : """)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
                     sys.exit()
 
                 except requests.exceptions.ConnectionError:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Error while requesting '{}'".format(php))
                     sys.exit()
 
@@ -630,7 +683,7 @@ Waiting for user input : """)
                 try:
                     parseJson = result.json()
                 except ValueError:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("ErrorJson", "Closing bot upon bad request...")
                     sys.exit()
 
@@ -688,9 +741,11 @@ Waiting for user input : """)
                     else:
                         result = self.request.get(url_login, timeout=5, verify=False)
                 except requests.exceptions.ConnectTimeout:
+                    self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
 
                 except requests.exceptions.ConnectionError:
+                    self.sentryClient.captureException();
                     self.viewsPrint("ErrorRequest", "Error while requesting '{}' with code: [{}]".format('login.php', url_login.status_code))
 
                 result.encoding = 'UTF-8'
@@ -714,11 +769,11 @@ Waiting for user input : """)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
 
                 except requests.exceptions.ConnectionError:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("ErrorRequest", "Error while requesting '{}' with code: [{}]".format(php, url_login.status_code))
 
                 if kwargs["debug"] is True:
@@ -745,11 +800,11 @@ Waiting for user input : """)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
 
                 except requests.exceptions.ConnectionError:
-
+                    self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Error while requesting '{}'".format(php))
 
                 result.encoding = 'UTF-8'
