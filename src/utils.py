@@ -129,7 +129,7 @@ class Utils:
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
-        self.sentryClient = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="release-1.5-patch.1")
+        self.sentryClient = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="release-1.5-patch.2")
         try:
            
             self.username = str(self.Configuration["username"])
@@ -305,8 +305,8 @@ class Utils:
                                                                                                          "Antivirus ", self.account_info["av"],
                                                                                                          "BruteForce ", self.account_info["brute"],
                                                                                                          "Level ", self.account_info["level"], round(progress*100, 1)),
-                                    "{}: {}\n{}: {}\n{}: {}\n{}: {}".format("Name", "PlatinumBot", "Version", "1.5 (Patch 1)", "Developer", "AtjonTV", "Developer", "vBlackOut"),
-                                    "{}: {}\n{}: {}\n{}: {}\n{} : {}".format("Proxy",  self.socksName, "HTTPS", self.socksHTTPS, "Login", self.socksLogin, "Host", "localhost")]]
+                                    "{}: {}\n{}: {}\n{}: {}\n{}: {}".format("Name", "PlatinumBot", "Version", "1.5 (Patch 2)", "Developer", "AtjonTV", "Developer", "vBlackOut"),
+                                    "{}: {}\n{}: {}\n{}: {}\n{} : {}".format("Proxy",  self.socksName, "HTTPS", self.socksHTTPS, "Login", self.socksLogin, "Host", self.socksHost)]]
         except KeyError:
           account_information = [["your account information", "update information", "bot information"], ["Error", "Error"]]
           self.sentryClient.captureException()
