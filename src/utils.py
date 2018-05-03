@@ -669,7 +669,7 @@ Waiting for user input : """)
                 # return just request don't login before.
                 try:
                     if self.socks_enable is True:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=5)
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=10)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
@@ -740,7 +740,7 @@ Waiting for user input : """)
                 url_login = self.Login('login.php', self.username, self.password)
                 try:
                     if self.socks_enable is True:
-                        result = self.request.get(url_login, proxies=self.socks_proxy, timeout=5, verify=False)
+                        result = self.request.get(url_login, proxies=self.socks_proxy, timeout=10, verify=False)
                     else:
                         result = self.request.get(url_login, timeout=5, verify=False)
                 except requests.exceptions.ConnectTimeout:
@@ -768,7 +768,7 @@ Waiting for user input : """)
                 # Create First request.
                 try:
                     if self.socks_enable is True:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=5)
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=10)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
@@ -799,7 +799,7 @@ Waiting for user input : """)
                 # return just request don't login before.
                 try:
                     if self.socks_enable is True:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=5)
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=10)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
@@ -816,7 +816,7 @@ Waiting for user input : """)
                 except:
                     time.sleep(3)
                     if self.socks_enable is True:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=5)
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=10)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                     result.encoding = 'UTF-8'
