@@ -157,8 +157,10 @@ class Utils:
             self.socksName = "None"
             self.socksHTTPS = ""
             self.socksLogin = ""
+            self.socksHost = "Localhost"
             if self.socks_enable is True:
                 self.socksName = "Socks4"
+                self.socksHost = self.socks_host
                 if self.socks_login is True:
                     self.socksLogin = "True"
                     if self.socks_https is True:
@@ -184,6 +186,7 @@ class Utils:
                             'http': 'socks4://{}:{}'.format(self.socks_host, self.socks_port)
                         }
             if self.socks_five_enable is True:
+                self.socksHost = self.socks_host
                 self.socksName = "Socks5"
                 if self.socks_five_login is True:
                     self.socksLogin = "True"
