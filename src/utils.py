@@ -34,7 +34,7 @@ except:
 import time
 import contextlib
 
-from raven import Client
+import raven
 
 #logger = logging.getLogger(__name__)
 
@@ -129,7 +129,10 @@ class Utils:
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
-        self.sentryClient = Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="release-1.5-patch.1")
+        self.dirBack = "/../"
+        if self.platform == "Windows":
+            self.dirBack = "\\..\\"
+        self.sentryClient = raven.Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="release-1.5-patch.2", tags = {'hash': raven.fetch_git_sha(os.path.dirname(__file__)+self.dirBack)}, ignore_exceptions = [ 'ValueError', 'KeyError', 'KeyboardInterrupt', 'ReadTimeout', 'ConnectTimeout' ])
         try:
            
             self.username = str(self.Configuration["username"])
@@ -157,8 +160,10 @@ class Utils:
             self.socksName = "None"
             self.socksHTTPS = ""
             self.socksLogin = ""
+            self.socksHost = "Localhost"
             if self.socks_enable is True:
                 self.socksName = "Socks4"
+                self.socksHost = self.socks_host
                 if self.socks_login is True:
                     self.socksLogin = "True"
                     if self.socks_https is True:
@@ -184,6 +189,7 @@ class Utils:
                             'http': 'socks4://{}:{}'.format(self.socks_host, self.socks_port)
                         }
             if self.socks_five_enable is True:
+                self.socksHost = self.socks_host
                 self.socksName = "Socks5"
                 if self.socks_five_login is True:
                     self.socksLogin = "True"
@@ -305,8 +311,8 @@ class Utils:
                                                                                                          "Antivirus ", self.account_info["av"],
                                                                                                          "BruteForce ", self.account_info["brute"],
                                                                                                          "Level ", self.account_info["level"], round(progress*100, 1)),
-                                    "{}: {}\n{}: {}\n{}: {}\n{}: {}".format("Name", "PlatinumBot", "Version", "1.5 (Patch 1)", "Developer", "AtjonTV", "Developer", "vBlackOut"),
-                                    "{}: {}\n{}: {}\n{}: {}\n{} : {}".format("Proxy",  self.socksName, "HTTPS", self.socksHTTPS, "Login", self.socksLogin, "Host", "localhost")]]
+                                    "{}: {}\n{}: {}\n{}: {}\n{}: {}".format("Name", "PlatinumBot", "Version", "1.5 (Patch 2)", "Developer", "AtjonTV", "Developer", "vBlackOut"),
+                                    "{}: {}\n{}: {}\n{}: {}\n{} : {}".format("Proxy",  self.socksName, "HTTPS", self.socksHTTPS, "Login", self.socksLogin, "Host", self.socksHost)]]
         except KeyError:
           account_information = [["your account information", "update information", "bot information"], ["Error", "Error"]]
           self.sentryClient.captureException()
@@ -666,7 +672,7 @@ Waiting for user input : """)
                 # return just request don't login before.
                 try:
                     if self.socks_enable is True:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=5)
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=10)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
@@ -737,7 +743,7 @@ Waiting for user input : """)
                 url_login = self.Login('login.php', self.username, self.password)
                 try:
                     if self.socks_enable is True:
-                        result = self.request.get(url_login, proxies=self.socks_proxy, timeout=5, verify=False)
+                        result = self.request.get(url_login, proxies=self.socks_proxy, timeout=10, verify=False)
                     else:
                         result = self.request.get(url_login, timeout=5, verify=False)
                 except requests.exceptions.ConnectTimeout:
@@ -765,7 +771,7 @@ Waiting for user input : """)
                 # Create First request.
                 try:
                     if self.socks_enable is True:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=5)
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=10)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
@@ -796,7 +802,7 @@ Waiting for user input : """)
                 # return just request don't login before.
                 try:
                     if self.socks_enable is True:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=5)
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=10)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
@@ -813,7 +819,7 @@ Waiting for user input : """)
                 except:
                     time.sleep(3)
                     if self.socks_enable is True:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=5)
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=10)
                     else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                     result.encoding = 'UTF-8'
