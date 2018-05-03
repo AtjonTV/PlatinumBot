@@ -129,7 +129,10 @@ class Utils:
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
-        self.sentryClient = raven.Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="release-1.5-patch.2", tags = {'hash': raven.fetch_git_sha(os.path.dirname(__file__))}, ignore_exceptions = [ ValueError, KeyError, KeyboardInterrupt, ReadTimeout, ConnectTimeout ])
+        self.dirBack = "/../"
+        if self.platform == "Windows":
+            self.dirBack = "\\..\\"
+        self.sentryClient = raven.Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="release-1.5-patch.2", tags = {'hash': raven.fetch_git_sha(os.path.dirname(__file__)+self.dirBack)}, ignore_exceptions = [ 'ValueError', 'KeyError', 'KeyboardInterrupt', 'ReadTimeout', 'ConnectTimeout' ])
         try:
            
             self.username = str(self.Configuration["username"])
