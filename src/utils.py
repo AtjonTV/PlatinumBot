@@ -129,10 +129,14 @@ class Utils:
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
+        self.bot_version = "1.5"
+        self.bot_patch = "3"
+        self.bot_state = "release"
+        self.bot_sversion = self.bot_state+"-"+self.bot_version+"-patch."+self.bot_patch
         self.dirBack = "/../"
         if self.platform == "Windows":
             self.dirBack = "\\..\\"
-        self.sentryClient = raven.Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release="release-1.5-patch.2", tags = {'hash': raven.fetch_git_sha(os.path.dirname(__file__)+self.dirBack)}, ignore_exceptions = [ 'ValueError', 'KeyError', 'KeyboardInterrupt', 'ReadTimeout', 'ConnectTimeout' ])
+        self.sentryClient = raven.Client(dsn='https://184c11134c2146f58d3908d52baa2c0e:216f42513e67452abb74c5924e55abbc@sentry.io/1194987', release=self.bot_sversion, tags = {'hash': raven.fetch_git_sha(os.path.dirname(__file__)+self.dirBack)}, ignore_exceptions = [ 'ValueError', 'KeyError', 'KeyboardInterrupt', 'ReadTimeout', 'ConnectTimeout' ])
         try:
            
             self.username = str(self.Configuration["username"])
@@ -143,78 +147,6 @@ class Utils:
             self.attack_mode = self.Configuration["attack_mode"]
             self.update = self.Configuration["update"]
             self.msgremotelog = self.Configuration["msgLog"]
-            self.socks_enable = self.Configuration["socks_enable"]
-            self.socks_https = self.Configuration["socks_https"]
-            self.socks_host = str(self.Configuration["socks_host"])
-            self.socks_port = self.Configuration["socks_port"]
-            self.socks_login = self.Configuration["socks_login"]
-            self.socks_user = str(self.Configuration["socks_user"])
-            self.socks_pass = str(self.Configuration["socks_pass"])
-            self.socks_five_enable = self.Configuration["socks5_enable"]
-            self.socks_five_https = self.Configuration["socks5_https"]
-            self.socks_five_host = str(self.Configuration["socks5_host"])
-            self.socks_five_port = self.Configuration["socks5_port"]
-            self.socks_five_login = self.Configuration["socks5_login"]
-            self.socks_five_user = str(self.Configuration["socks5_user"])
-            self.socks_five_pass = str(self.Configuration["socks5_pass"])
-            self.socksName = "None"
-            self.socksHTTPS = ""
-            self.socksLogin = ""
-            self.socksHost = "Localhost"
-            if self.socks_enable is True:
-                self.socksName = "Socks4"
-                self.socksHost = self.socks_host
-                if self.socks_login is True:
-                    self.socksLogin = "True"
-                    if self.socks_https is True:
-                        self.socksHTTPS = "True"
-                        self.socks_proxy = {
-                            'https': 'socks4://{}:{}@{}:{}'.format(self.socks_user, self.socks_pass, self.socks_host, self.socks_port)
-                        }
-                    else:
-                        self.socksHTTPS = "False"
-                        self.socks_proxy = {
-                            'http': 'socks4://{}:{}@{}:{}'.format(self.socks_user, self.socks_pass, self.socks_host, self.socks_port)
-                        }
-                else:
-                    self.socksLogin = "False"
-                    if self.socks_https:
-                        self.socksHTTPS = "True"
-                        self.socks_proxy = {
-                            'https': 'socks4://{}:{}'.format(self.socks_host, self.socks_port)
-                        }
-                    else:
-                        self.socksHTTPS = "False"
-                        self.socks_proxy = {
-                            'http': 'socks4://{}:{}'.format(self.socks_host, self.socks_port)
-                        }
-            if self.socks_five_enable is True:
-                self.socksHost = self.socks_host
-                self.socksName = "Socks5"
-                if self.socks_five_login is True:
-                    self.socksLogin = "True"
-                    if self.socks_five_https is True:
-                        self.socksHTTPS = "True"
-                        self.socks_proxy = {
-                                'https': 'socks5://{}:{}@{}:{}'.format(self.socks_five_user, self.socks_five_pass, self.socks_five_host, self.socks_five_port)
-                        }
-                    else:
-                        self.socksHTTPS = "False"
-                        self.socks_proxy = {
-                                'http': 'socks5://{}:{}@{}:{}'.format(self.socks_five_user, self.socks_five_pass, self.socks_five_host, self.socks_five_port)
-                        }
-                else:
-                    self.socksLogin = "False"
-                    if self.socks_five_https:
-                        self.socksHTTPS = "True"
-                        self.socks_proxy = {
-                                'https': 'socks5://{}:{}'.format(self.socks_five_host, self.socks_five_port)
-                        }
-                    else:
-                        self.socksHTTPS = "False"
-                        self.socks_proxy = {
-                                'http': 'socks5://{}:{}'.format(self.socks_five_host, self.socks_five_port)
-                        }
         except KeyError as e:
             print("Error Configuration {}".format(e))
             sys.exit()
@@ -298,7 +230,7 @@ class Utils:
             self.account_info = self.requestStringNowait("update.php", accesstoken=self.Configuration["accessToken"])
             self.exploits = int(self.account_info["exploits"])
             progress = round(int(self.account_info["exp"]))/round(int(self.account_info["expreq"]))
-            account_information = [["account information", "update information", "bot information", "proxy information"],
+            account_information = [["account information", "update information", "bot information"],
                                    ["{0}: {1}\n{2}: {3}\n{4}: {5}\n{6}: {7}\n{8}: {9}\n{10}: {11}".format("Exploits ", self.exploits,
                                                                                                           "Spam ", self.account_info["spam"],
                                                                                                           "Network speed ", self.account_info["inet"],
@@ -311,10 +243,9 @@ class Utils:
                                                                                                          "Antivirus ", self.account_info["av"],
                                                                                                          "BruteForce ", self.account_info["brute"],
                                                                                                          "Level ", self.account_info["level"], round(progress*100, 1)),
-                                    "{}: {}\n{}: {}\n{}: {}\n{}: {}".format("Name", "PlatinumBot", "Version", "1.5 (Patch 2)", "Developer", "AtjonTV", "Developer", "vBlackOut"),
-                                    "{}: {}\n{}: {}\n{}: {}\n{} : {}".format("Proxy",  self.socksName, "HTTPS", self.socksHTTPS, "Login", self.socksLogin, "Host", self.socksHost)]]
+                                    "{}: {}\n{}: {}\n{}: {}\n{}: {}".format("Name", "PlatinumBot", "Version", self.bot_version+" (Patch "+self.bot_patch+")", "Developer", "AtjonTV", "Developer", "vBlackOut")]]
         except KeyError:
-          account_information = [["your account information", "update information", "bot information"], ["Error", "Error"]]
+          account_information = [["account information", "update information", "bot information"], ["Error", "Error"]]
           self.sentryClient.captureException()
           sys.exit()
         table1 = SingleTable(data)
@@ -671,10 +602,7 @@ Waiting for user input : """)
 
                 # return just request don't login before.
                 try:
-                    if self.socks_enable is True:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=10)
-                    else:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=10)
                 except requests.exceptions.ConnectTimeout:
                     self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
@@ -742,10 +670,7 @@ Waiting for user input : """)
 
                 url_login = self.Login('login.php', self.username, self.password)
                 try:
-                    if self.socks_enable is True:
-                        result = self.request.get(url_login, proxies=self.socks_proxy, timeout=10, verify=False)
-                    else:
-                        result = self.request.get(url_login, timeout=5, verify=False)
+                        result = self.request.get(url_login, timeout=10, verify=False)
                 except requests.exceptions.ConnectTimeout:
                     self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
@@ -770,10 +695,7 @@ Waiting for user input : """)
 
                 # Create First request.
                 try:
-                    if self.socks_enable is True:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=10)
-                    else:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
+                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=10)
                 except requests.exceptions.ConnectTimeout:
                     self.sentryClient.captureException();
                     self.viewsPrint("BadRequest", "Timeout while requesting '{}'".format(php))
@@ -801,9 +723,6 @@ Waiting for user input : """)
 
                 # return just request don't login before.
                 try:
-                    if self.socks_enable is True:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=10)
-                    else:
                         result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                 except requests.exceptions.ConnectTimeout:
                     self.sentryClient.captureException();
@@ -818,10 +737,7 @@ Waiting for user input : """)
                     parseJson = result.json()
                 except:
                     time.sleep(3)
-                    if self.socks_enable is True:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), proxies=self.socks_proxy, timeout=10)
-                    else:
-                        result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
+                    result = self.request.get(self.generateURL(self.uID, php, **kwargs), timeout=5)
                     result.encoding = 'UTF-8'
                     parseJson = result.json()
 
