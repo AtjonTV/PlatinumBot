@@ -19,27 +19,3 @@ uID:  # <- Automatically added uID for your account don't change /!\
 accessToken:  # <- Automatically added accessToken for your account don't change /!\
 update: [SDK, FW, AV, BP, IPSP] # All Apps: AV, FW, SPAM, BRUTE, BP, SDK, IPSP
 msgLog: "Hacked with <3 by #PB"  # <- It is recommented to change this message /!\
-
-
-#####################
-#      PROXIES      #
-#####################
-# /!\ INFO: If the Socks 5 Proxy is enabled it will override the Socks 4 Proxy /!\
-
-# Socks 4 Proxy
-socks_enable: false # <- if true it will use the config below
-socks_https: true # <- this should only be true when the proxy supports HTTPS/SSL/TLS
-socks_host: localhost # <- the server's ip address or domain name
-socks_port: 1080 # <- the port the proxy is running on
-socks_login: false # <- this should only be true when the proxy needs a username and password
-socks_user: # <- the username for the proxy (DO NOT USE SPECIAL CHARACTERS HERE)
-socks_pass: # <- the password for the proxy user (DO NOT USE SPECIAL CHARACTERS HERE)
-
-# Socks 5 Proxy
-socks5_enable: false # <- if true it will use the config below
-socks5_https: true # <- this should only be true when the proxy supports HTTPS/SSL/TLS
-socks5_host: localhost # <- the server's ip address or domain name
-socks5_port: 1080 # <- the port the proxy is running on
-socks5_login: false # <- this should only be true when the proxy needs a username and password
-socks5_user: # <- the username for the proxy (DO NOT USE SPECIAL CHARACTERS HERE)
-socks5_pass: # <- the password for the proxy user (DO NOT USE SPECIAL CHARACTERS HERE)
