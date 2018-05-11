@@ -130,7 +130,7 @@ class Utils:
         self.account_info = None
         self.login = "0"
         self.bot_version = "1.5"
-        self.bot_patch = "3"
+        self.bot_patch = "4"
         self.bot_state = "release"
         self.bot_sversion = self.bot_state+"-"+self.bot_version+"-patch."+self.bot_patch
         self.dirBack = "/../"
@@ -182,7 +182,6 @@ class Utils:
           try:
               Configuration = yaml.load(stream, Loader=yaml.RoundTripLoader)
           except yaml.YAMLError as exc:
-              self.sentryClient.captureException();
               self.viewsPrint("ErrorConfiguration", "{} [{}]".format("Error in your config.yml please check in", exc))
               sys.exit()
 
