@@ -125,7 +125,7 @@ class Utils:
         self.request = None
         self.secret = "aeffI"
         self.Configuration = self.readConfiguration()
-        self.url = "https://api.vhack.cc/mobile/" + self.Configuration['vhackos_api']
+        self.url = "https://api.vhack.cc/mobile/" + str(self.Configuration['vhackos_api'])
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
