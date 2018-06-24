@@ -124,8 +124,8 @@ class Utils:
         self.platform = platform.system()
         self.request = None
         self.secret = "aeffI"
-        self.url = "https://api.vhack.cc/mobile/16/"
         self.Configuration = self.readConfiguration()
+        self.url = "https://api.vhack.cc/mobile/" + self.Configuration['vhackos_api']
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
