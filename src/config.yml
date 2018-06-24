@@ -1,5 +1,9 @@
-username:  # <- Your Username Account
-password:  # <- Tour Password Account
+# vHackOS Settings
+vhackos_api: 17
+
+# User Settings
+username:  # <- Username
+password:  # <- Password
 
 debug: false # <- debug mode
 
