@@ -124,13 +124,13 @@ class Utils:
         self.platform = platform.system()
         self.request = None
         self.secret = "aeffI"
-        self.url = "https://api.vhack.cc/mobile/16/"
         self.Configuration = self.readConfiguration()
+        self.url = "https://api.vhack.cc/mobile/" + str(self.Configuration['vhackos_api'])
         self.numberLoop = 0
         self.account_info = None
         self.login = "0"
         self.bot_version = "1.5"
-        self.bot_patch = "3"
+        self.bot_patch = "4"
         self.bot_state = "release"
         self.bot_sversion = self.bot_state+"-"+self.bot_version+"-patch."+self.bot_patch
         self.dirBack = "/../"
@@ -182,7 +182,6 @@ class Utils:
           try:
               Configuration = yaml.load(stream, Loader=yaml.RoundTripLoader)
           except yaml.YAMLError as exc:
-              self.sentryClient.captureException();
               self.viewsPrint("ErrorConfiguration", "{} [{}]".format("Error in your config.yml please check in", exc))
               sys.exit()
 
